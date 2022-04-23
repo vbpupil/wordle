@@ -1,0 +1,45 @@
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+.wordle_row{
+    margin-bottom: .5rem;
+}
+
+.wordle_cell_wrapper{
+    display: inline-block;
+}
+
+.wordle_cell_wrapper input{
+    color: white;
+    text-align: center;
+    font-size: 2rem;
+    text-transform: capitalize;
+    background: transparent;
+    width: 3rem;
+    height: 3rem;
+    border: solid 2px #ccc;
+    border-radius: 5px;
+    margin-right: .5rem;
+}
+
+.wordle_cell_wrapper input.match{
+    background: #6AAA64;
+}
+
+.wordle_cell_wrapper input.in-word{
+    background: #C9B458;
+}
+
+.wordle_cell_wrapper input.not-matched{
+    background: #787C7E;
+}
+
+.wordle_board{
+    width: 350px;
+    height:auto;
+    margin: 5rem auto 0;
+}
