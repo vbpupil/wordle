@@ -5,6 +5,10 @@ button:focus {
     outline: none;
 }
 
+input[type="text"]:disabled{
+    background: #ccc;
+}
+
 .wordle_row{
     margin-bottom: .5rem;
 }

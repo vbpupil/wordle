@@ -16,6 +16,12 @@ interface BoardState {
     activeRound: number;
     rows: JSX.Element[],
     reavealAnswer?: boolean
+    rowData: RowDataInterface[]
+}
+
+interface RowDataInterface {
+    disabled: boolean;
+    revealAnswer: boolean;
 }
 
 export default class Wordle extends React.Component<WordleProps, BoardState> {
@@ -28,15 +34,12 @@ export default class Wordle extends React.Component<WordleProps, BoardState> {
             activeRound: 0,
             word: '',
             rows: [],
+            rowData: [],
             reavealAnswer: false
         };
     }
 
     componentDidMount() {
-        this.initialiseBoard();
-    }
-
-    initialiseBoard(){
         this.setWord();
     }
 
@@ -45,27 +48,46 @@ export default class Wordle extends React.Component<WordleProps, BoardState> {
         this.setState({
             ...this.state,
             word: words[randKey]
+        }, this.setRowData);
+    }
+
+    setRowData() {
+        let rowData: RowDataInterface[] = this.state.rowData;
+        for (let i = 0; i < this.state.rounds; i++) {
+            rowData.push({disabled: true, revealAnswer: false})
+        }
+        this.setState({
+            ...this.state,
+            rowData
         }, this.setRows);
     }
 
     setRows() {
         let rows = [];
-        for (let i = 0; i < 5; i++) {
-            rows.push(<Row key={i} word={this.state.word} revealAnswer={false} disabled={true}/>);
+        for (let i = 0; i < this.state.rounds; i++) {
+            rows.push(<Row key={i} word={this.state.word} revealAnswer={this.state.rowData[i].revealAnswer}
+                           disabled={this.state.rowData[i].disabled}/>);
         }
         this.setState({
             ...this.state,
-            rows
-        });
+            rows,
+        }, this.incrementRound);
     }
 
-    startRound():void{
-        // this.state.rows[this.state.activeRound].disabled = false;
+    incrementRound(): void {
+        const rowData = this.state.rowData.map((data, key) => {
+            return key === this.state.activeRound ? {...data, disabled: !data.disabled} : data;
+        });
+
+        this.setState({
+            ...this.state,
+            rowData,
+            activeRound: this.state.activeRound + 1
+        });
     }
 
     handleSubmit(): void {
         console.log('handleSubmit clicked');
-        // this.state.rows[this.state.activeRound - 1].revealAnswer = true;
     }
 
     render() {
