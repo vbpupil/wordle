@@ -4,12 +4,14 @@ import Cell from './Cell';
 interface RowProps {
     word: string;
     revealAnswer: boolean;
+    disabled: boolean;
 };
 
 interface RowState{
     word: string;
     cells: JSX.Element[];
     revealAnswer: boolean;
+    disabled: boolean;
 };
 
 export default class Row extends React.Component<RowProps, RowState> {
@@ -18,7 +20,8 @@ export default class Row extends React.Component<RowProps, RowState> {
         this.state = {
             word: this.props.word,
             cells: [],
-            revealAnswer: this.props.revealAnswer
+            revealAnswer: this.props.revealAnswer,
+            disabled: this.props.disabled
         };
     }
 
@@ -30,7 +33,7 @@ export default class Row extends React.Component<RowProps, RowState> {
         let cells = [];
         const wordCount = this.state.word.split('')
         for (let i = 0; i < wordCount.length; i++) {
-            cells.push(<Cell key={i} disabled={true} word={this.state.word} answerLetter={wordCount[i]} revealAnswer={this.state.revealAnswer} />);
+            cells.push(<Cell key={i} disabled={this.state.disabled} word={this.state.word} answerLetter={wordCount[i]} revealAnswer={this.state.revealAnswer} />);
         }
 
         this.setState({

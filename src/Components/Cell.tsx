@@ -54,7 +54,8 @@ export default class Cell extends React.Component<CellProps, CellState> {
         return (
             <div className="wordle_cell_wrapper">
                 <input type="text" maxLength={1} onChange={this.onInputchange}
-                   className={baseClass}
+                       className={baseClass}
+                       disabled={this.state.disabled}
                 />
             </div>
         );

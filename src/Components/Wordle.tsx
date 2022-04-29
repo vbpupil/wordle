@@ -25,7 +25,7 @@ export default class Wordle extends React.Component<WordleProps, BoardState> {
         this.state = {
             letterCount: this.props.WordLength,
             rounds: this.props.NumOfRounds,
-            activeRound: 1,
+            activeRound: 0,
             word: '',
             rows: [],
             reavealAnswer: false
@@ -51,12 +51,16 @@ export default class Wordle extends React.Component<WordleProps, BoardState> {
     setRows() {
         let rows = [];
         for (let i = 0; i < 5; i++) {
-            rows.push(<Row key={i} word={this.state.word} revealAnswer={false}/>);
+            rows.push(<Row key={i} word={this.state.word} revealAnswer={false} disabled={true}/>);
         }
         this.setState({
             ...this.state,
             rows
         });
+    }
+
+    startRound():void{
+        // this.state.rows[this.state.activeRound].disabled = false;
     }
 
     handleSubmit(): void {
