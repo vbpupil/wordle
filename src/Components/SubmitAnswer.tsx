@@ -5,7 +5,6 @@ interface SubmitAnswerProp {
 };
 
 export default class SubmitAnswer extends React.Component<SubmitAnswerProp, any> {
-
     render() {
         return (
             <button onClick={() => this.props.handleClick() }>Submit</button>

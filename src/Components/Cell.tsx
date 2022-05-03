@@ -1,61 +1,64 @@
-import React from 'react';
+import React, {SyntheticEvent} from 'react';
+import {CellDataInterface} from "./Wordle";
 
 interface CellProps {
-    answerLetter: string;
     revealAnswer: boolean;
+    rowNum: number;
+    cellNum: number;
+
     word: string;
     disabled: boolean;
+    handleGuess: (rowNumber: number, cellNumber: number, guess: string) => void;
+
+    cellData: CellDataInterface[];
 };
 
-interface CellState {
-    answer: string;
-    guess: string;
-    reveal: boolean;
-    word: string;
-    disabled: boolean;
-}
-
-export default class Cell extends React.Component<CellProps, CellState> {
+export default class Cell extends React.Component<CellProps> {
     constructor(props: CellProps) {
         super(props);
-        this.state = {
-            word: this.props.word,
-            answer: this.props.answerLetter,
-            reveal: this.props.revealAnswer,
-            guess: '',
-            disabled: this.props.disabled
-        };
     }
 
-    onInputchange = (event: any) => {
-        this.setState({
-            ...this.state,
-            guess: event.target.value
-        });
+    handleDownKeyPress(event:any) {
+        // console.log('hit')
+        // return false
+        // const value = event.target.value.split('');
+        //
+        // if (value.length > 1) {
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        // }
     }
 
     render() {
         let baseClass = '';
 
-        if (this.state.guess !== '' && this.state.reveal) {
-            if (this.state.word.includes(this.state.guess)) {
+        if (this.props.cellData[this.props.cellNum].guessLetter !== '' && this.props.revealAnswer) {
+            if (this.props.word.includes(this.props.cellData[this.props.cellNum].guessLetter)) {
                 baseClass = 'in-word'; // orange
             } else {
-                if (this.state.answer !== this.state.guess) {
+                if (this.props.cellData[this.props.cellNum].answerLetter !== this.props.cellData[this.props.cellNum].guessLetter) {
                     baseClass = 'not-matched'; // gray
                 }
             }
 
-            if (this.state.guess === this.state.answer) {
+            if (this.props.cellData[this.props.cellNum].guessLetter === this.props.cellData[this.props.cellNum].answerLetter) {
                 baseClass = 'match'; // green
             }
         }
 
         return (
             <div className="wordle_cell_wrapper">
-                <input type="text" maxLength={1} onChange={this.onInputchange}
+                <input type="text" maxLength={1}
+                       onChange={(e) => {
+                           this.props.handleGuess(
+                               this.props.rowNum,
+                               this.props.cellNum,
+                               e.target.value
+                           )
+                       }}
+                       onKeyDown={this.handleDownKeyPress}
                        className={baseClass}
-                       disabled={this.state.disabled}
+                       disabled={this.props.disabled}
                 />
             </div>
         );

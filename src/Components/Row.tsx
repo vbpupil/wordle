@@ -1,52 +1,38 @@
 import React from 'react';
 import Cell from './Cell';
+import {CellDataInterface} from "./Wordle";
 
 interface RowProps {
     word: string;
     revealAnswer: boolean;
     disabled: boolean;
+    handleGuess: (rowNumber: number, cellNumber: number, guess: string) => void;
+    rowNum: number;
+    cellData: CellDataInterface[];
 };
 
-interface RowState{
-    word: string;
-    cells: JSX.Element[];
-    revealAnswer: boolean;
-    disabled: boolean;
-};
-
-export default class Row extends React.Component<RowProps, RowState> {
-    constructor(props: RowProps) {
-        super(props);
-        this.state = {
-            word: this.props.word,
-            cells: [],
-            revealAnswer: this.props.revealAnswer,
-            disabled: this.props.disabled
-        };
-    }
-
-    componentDidMount() {
-        this.setCells();
-    }
-
-    setCells() {
+export default class Row extends React.Component<RowProps> {
+    render() {
         let cells = [];
-        const wordCount = this.state.word.split('')
+
+        const wordCount = this.props.word.split('')
         for (let i = 0; i < wordCount.length; i++) {
-            cells.push(<Cell key={i} disabled={this.state.disabled} word={this.state.word} answerLetter={wordCount[i]} revealAnswer={this.state.revealAnswer} />);
+            cells.push(<Cell key={i}
+                             cellNum={i}
+                             cellData={this.props.cellData}
+                             disabled={this.props.disabled}
+                             word={this.props.word}
+                             revealAnswer={this.props.revealAnswer}
+                             handleGuess={this.props.handleGuess}
+                             rowNum={this.props.rowNum}
+            />);
         }
 
-        this.setState({
-           ...this.state,
-           cells
-        });
-    }
-
-    render() {
         return (
             <div className="wordle_row">
-                {this.state.cells}
+                {cells}
             </div>
-        );
+        )
+            ;
     }
 }
